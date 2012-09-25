@@ -1,0 +1,28 @@
+{	
+	"name"    : "node-dir",
+	"version" : "0.0.1",
+	"description" : "asynchronous file and directory operations for Node.js",
+	"main"    : "index",
+	"homepage": "https://github.com/fshost",
+	"author"  : {
+			"name"  : "Nathan Cartwright",
+			"email" : "fshost@yahoo.com",
+			"url"   : "https://github.com/fshost"
+	},
+	"directories": {
+		"lib": "lib"
+	},
+	"scripts": 	{ "test": "node ./test/test.js" },
+	"engines": 	{ "node": ">= 0.5.0" },
+	"licenses": ["MIT"],
+	"keywords": [
+		"node-dir",
+		"directory",
+		"dir",
+		"subdir",
+		"file",
+		"asynchronous",
+		"Node.js",
+		"fs"
+	]
+}

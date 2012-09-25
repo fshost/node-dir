@@ -1,0 +1,3 @@
+begin content of file4
+content body
+end content of file4
