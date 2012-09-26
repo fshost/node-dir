@@ -3,7 +3,7 @@ asynchronous recursive file and directory operations for Node.js
 
 ## methods
 
-### readFiles
+### readFiles ( dir, fileCallback, finishedCallback )
 read all files in directory and its subdirectories and pass the file contents to a callback
 
 #### example
@@ -20,8 +20,9 @@ read all files in directory and its subdirectories and pass the file contents to
 	        }
 	    );
 
-### filePaths
-get an array of file-system paths for all files in the directory and its subdirectories
+		
+### files( dir, callback )
+iterate all files in the directory and its subdirectories and pass their file-system paths to a callback
 
 #### example
 	    var dir = require('node-dir');
@@ -30,14 +31,33 @@ get an array of file-system paths for all files in the directory and its subdire
 	    	console.log(files);
 	    });
 
-### subDirs
-get an array of file-system path for all subdirectories, including nested subdirs
+		
+### subdirs( dir, callback )
+iterate all subdirectories in the directory (recursive) and pass their file-system paths to a callback
 
 #### example
 	 	var dir = require('node-dir');
-		dir.subDirs(__dirname, function(err, dirs) {
+		dir.subdirs(__dirname, function(err, subdirs) {
 			if (err) throw err;
-			console.log(dirs);
+			console.log(subdirs);
+		});
+		
+
+## paths (dir, [combine], callback )
+iterate all files and subdirs in the directory (recursive) and  pass their file-system paths to a callback
+
+#### example
+	 	var dir = require('node-dir');
+		// by default returns an object containing two array properties (files and dirs)
+		dir.paths(__dirname, function(err, paths) {
+			if (err) throw err;
+			console.log('files:\n',paths.files);
+			console.log('subdirs:\n', paths.dirs);
+		});
+		// combine both files and subdirs into a single array
+		dir.paths(__dirname, true, function(err, paths) {
+			if (err) throw err;
+			console.log('paths:\n',paths);
 		});
 		
 ## License
