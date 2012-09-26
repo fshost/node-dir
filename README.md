@@ -1,4 +1,4 @@
-## node-dir
+# node-dir
 asynchronous recursive file and directory operations for Node.js
 
 ## methods
@@ -43,7 +43,7 @@ iterate all subdirectories in the directory (recursive) and pass their file-syst
 		});
 		
 
-## paths (dir, [combine], callback )
+### paths (dir, [combine], callback )
 iterate all files and subdirs in the directory (recursive) and  pass their file-system paths to a callback
 
 #### example
