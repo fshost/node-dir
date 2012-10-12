@@ -26,7 +26,7 @@ iterate all files in the directory and its subdirectories and pass their file-sy
 
 #### example
 	    var dir = require('node-dir');
-	    dir.filePaths(__dirname, function(err, files) {
+	    dir.files(__dirname, function(err, files) {
 	    	if (err) throw err;
 	    	console.log(files);
 	    });
