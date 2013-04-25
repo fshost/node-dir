@@ -1,60 +1,58 @@
 # node-dir
-asynchronous recursive file and directory operations for Node.js
+small node.js module to provide some convenience methods for asynchronous, non-blocking recursive directory operations like being able to get an array of all files, subdirectories, or both (with the option to either combine or separate the results), and for sequentially reading and processing the contents all files in a directory recursively, optionally firing a callback when finished.
 
-## methods
+####methods
+for the sake of brevity, assume that the following line of code precedes all of the examples
 
-### readFiles ( dir, fileCallback, finishedCallback )
-read all files in directory and its subdirectories and pass the file contents to a callback
+    var dir = require('node-dir');
 
-#### example
-	    var dir = require('node-dir');
-	    dir.readFiles(__dirname, 
-	        function(err, content, next) {
-	            if (err) throw err;
-	            console.log(content);
-	            next();	
-	    	},
-	    	function(err, files){
-	        	if (err) throw err;
-	        	console.log('finished reading files:',files);
-	        }
-	    );
 
-		
-### files( dir, callback )
-iterate all files in the directory and its subdirectories and pass their file-system paths to a callback
+####readFiles( dir, fileCallback, finishedCallback )
+sequentially read the content of each file in a directory, passing the contents to a callback, optionally calling a finished callback when complete.
 
-#### example
-	    var dir = require('node-dir');
-	    dir.files(__dirname, function(err, files) {
-	    	if (err) throw err;
-	    	console.log(files);
-	    });
+    dir.readFiles(__dirname, 
+        function(err, content, next) {
+            if (err) throw err;
+            console.log(content);
+            // required to continue to next file:
+            next();
+    	},
+    	function(err, files){
+        	if (err) throw err;
+        	console.log('finished reading files:',files);
+        });
 
 		
-### subdirs( dir, callback )
-iterate all subdirectories in the directory (recursive) and pass their file-system paths to a callback
+####files( dir, callback )
+asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback
+	dir.files(__dirname, function(err, files) {
+	    if (err) throw err;
+	    console.log(files);
+	});
 
-#### example
-	 	var dir = require('node-dir');
-		dir.subdirs(__dirname, function(err, subdirs) {
-			if (err) throw err;
-			console.log(subdirs);
-		});
+		
+####subdirs( dir, callback )
+asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of directory paths to a callback
+
+	dir.subdirs(__dirname, function(err, subdirs) {
+		if (err) throw err;
+		console.log(subdirs);
+	});
 		
 
-### paths (dir, [combine], callback )
-iterate all files and subdirs in the directory (recursive) and  pass their file-system paths to a callback
+####paths(dir, [combine], callback )
+asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of both file and directory paths to a callback
 
-#### example
-	 	var dir = require('node-dir');
-		// by default returns an object containing two array properties (files and dirs)
+separated into two distinct arrays (paths.files and paths.dirs)
+
 		dir.paths(__dirname, function(err, paths) {
 			if (err) throw err;
 			console.log('files:\n',paths.files);
 			console.log('subdirs:\n', paths.dirs);
 		});
-		// combine both files and subdirs into a single array
+		
+combined in a single array (convenience method for concatenation of the above)
+
 		dir.paths(__dirname, true, function(err, paths) {
 			if (err) throw err;
 			console.log('paths:\n',paths);
