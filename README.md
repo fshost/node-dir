@@ -16,48 +16,48 @@ sequentially read the content of each file in a directory, passing the contents 
             console.log(content);
             // required to continue to next file:
             next();
-    	},
-    	function(err, files){
-        	if (err) throw err;
-        	console.log('finished reading files:',files);
+        },
+        function(err, files){
+            if (err) throw err;
+            console.log('finished reading files:',files);
         });
 
-		
+        
 ####files( dir, callback )
 asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback
-	
-	dir.files(__dirname, function(err, files) {
-	    if (err) throw err;
-	    console.log(files);
-	});
+    
+    dir.files(__dirname, function(err, files) {
+        if (err) throw err;
+        console.log(files);
+    });
 
-		
+        
 ####subdirs( dir, callback )
 asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of directory paths to a callback
 
-	dir.subdirs(__dirname, function(err, subdirs) {
-		if (err) throw err;
-		console.log(subdirs);
-	});
-		
+    dir.subdirs(__dirname, function(err, subdirs) {
+        if (err) throw err;
+        console.log(subdirs);
+    });
+        
 
 ####paths(dir, [combine], callback )
 asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of both file and directory paths to a callback
 
 separated into two distinct arrays (paths.files and paths.dirs)
 
-		dir.paths(__dirname, function(err, paths) {
-			if (err) throw err;
-			console.log('files:\n',paths.files);
-			console.log('subdirs:\n', paths.dirs);
-		});
-		
+    dir.paths(__dirname, function(err, paths) {
+        if (err) throw err;
+        console.log('files:\n',paths.files);
+        console.log('subdirs:\n', paths.dirs);
+    });
+
 combined in a single array (convenience method for concatenation of the above)
 
-		dir.paths(__dirname, true, function(err, paths) {
-			if (err) throw err;
-			console.log('paths:\n',paths);
-		});
-		
+    dir.paths(__dirname, true, function(err, paths) {
+        if (err) throw err;
+        console.log('paths:\n',paths);
+    });
+
 ## License
 MIT licensed (SEE LICENSE.txt)
