@@ -25,6 +25,7 @@ sequentially read the content of each file in a directory, passing the contents 
 		
 ####files( dir, callback )
 asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback
+	
 	dir.files(__dirname, function(err, files) {
 	    if (err) throw err;
 	    console.log(files);
