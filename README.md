@@ -73,4 +73,4 @@ dir.paths(__dirname, true, function(err, paths) {
 
 
 ## License
-MIT licensed (SEE LICENSE.txt)
+MIT licensed (See LICENSE.txt)
