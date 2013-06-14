@@ -81,7 +81,8 @@ dir.paths(__dirname, true, function(err, paths) {
 
 #### contributors
 - [Nathan Cartwright](https://github.com/fshost)
-- [Robatron](https://github.com/robatron)
+- [robatron](https://github.com/robatron)
+- [nazomikan](https://github.com/nazomikan)
 
 ## License
 MIT licensed (See LICENSE.txt)
