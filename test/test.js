@@ -35,6 +35,31 @@ describe('readfiles method', function() {
             done();
         });
     });
+
+    it('can be called with a callback in which the filename argument is omitted', function(done) {
+        dir.readFiles(
+            tdir, function(err, content, next) {
+            expect(err).to.equal(null);
+            content.should.be.a('string');
+            content.indexOf('begin content of').should.equal(0);
+            next();
+        }, function(err) {
+            expect(err).to.equal(null);
+            done();
+        });
+    });
+
+    it('can be called with the done callback argument omitted', function(done) {
+        var i = 0;
+        dir.readFiles(
+            tdir, function(err, content, next) {
+            expect(err).to.equal(null);
+            next();
+            i++;
+            if (i === 4) done();
+        });
+    });
+
 });
 
 describe('readFiles method', function() {
@@ -85,10 +110,10 @@ describe('paths method', function() {
                 return path.relative(__dirname, curPath);
             });
             relFiles.should.eql([
-                'testdir/file1.txt',
-                'testdir/file2.txt',
-                'testdir/subdir/file3.txt',
-                'testdir/subdir/file4.txt'
+                    'testdir/file1.txt',
+                    'testdir/file2.txt',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.txt'
             ]);
             relPaths.length.should.equal(1);
             relPaths[0].should.equal('testdir/subdir');
@@ -105,11 +130,11 @@ describe('paths method', function() {
                     return path.relative(__dirname, curPath);
                 });
                 relPaths.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.txt',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.txt',
-                    'testdir/subdir'
+                        'testdir/file1.txt',
+                        'testdir/file2.txt',
+                        'testdir/subdir/file3.txt',
+                        'testdir/subdir/file4.txt',
+                        'testdir/subdir'
                 ]);
             });
             done();
