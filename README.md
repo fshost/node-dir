@@ -12,18 +12,16 @@ var dir = require('node-dir');
 Sequentially read the content of each file in a directory, passing the contents to a callback, optionally calling a finished callback when complete.
 
 ```javascript
-dir.readFiles(__dirname, 
+dir.readFiles(__dirname,
     function(err, content, next) {
         if (err) throw err;
-        console.log('content for', filepath + '\n' + content);
-        // continue to next file:
+        console.log('content:', content);
         next();
     },
     function(err, files){
         if (err) throw err;
         console.log('finished reading files:',files);
     });
-
 
 // the callback for each file can optionally have a filename argument as its 3rd parameter
 // and the finishedCallback argument is optional, e.g.
