@@ -7,10 +7,10 @@ chai.should();
 var dir = require('..'),
     tdir = __dirname + '/testdir';
 
-var filenames = [];
-
 describe('readfiles method', function() {
+
     it('should exec a callback on every file contents and exec a done callback', function(done) {
+        var filenames = [];
         dir.readFiles(
             tdir, function(err, content, filename, next) {
             expect(err).to.equal(null);
@@ -27,11 +27,121 @@ describe('readfiles method', function() {
             });
             relFiles.should.eql([
                     'testdir/file1.txt',
-                    'testdir/file2.txt',
+                    'testdir/file2.text',
                     'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.txt'
+                    'testdir/subdir/file4.text'
             ]);
             filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            done();
+        });
+    });
+
+    it('should accept an options argument that can specify encoding', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+            encoding: 'ascii'
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            content.should.equal(expected);
+            filenames.push(shortName);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            done();
+        });
+    });
+
+    it('if shortName option is true, only aggregate the base filename rather than the full filepath', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+            shortName: true
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            path.basename(filename).should.equal(filename);
+            var shortName = filename.replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            content.should.equal(expected);
+            filenames.push(filename);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            filenames.should.eql(['file1.txt', 'file2.text', 'file3.txt', 'file4.text']);
+            done();
+        });
+    });
+
+    it('if given a match option, should only read files that match it', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+            match: /txt$/
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            content.should.equal(expected);
+            filenames.push(shortName);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            filenames.should.eql(['file1', 'file3']);
+            done();
+        });
+    });
+
+    it('match option should match pattern only to the filename itself, not the full filepath', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+            match: /^file/
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            filenames.push(shortName);
+            content.should.equal(expected);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            var relFiles = files.map(function(curPath) {
+                return path.relative(__dirname, curPath);
+            });
+            relFiles.should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.text'
+            ]);
+            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            done();
+        });
+    });
+
+    it('if given an exclude option, should only read files that do not match the exclude pattern', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+            exclude: /text$/
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            content.should.equal(expected);
+            filenames.push(shortName);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            filenames.should.eql(['file1', 'file3']);
             done();
         });
     });
@@ -71,9 +181,9 @@ describe('readFiles method', function() {
             });
             relFiles.should.eql([
                     'testdir/file1.txt',
-                    'testdir/file2.txt',
+                    'testdir/file2.text',
                     'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.txt'
+                    'testdir/subdir/file4.text'
             ]);
             done();
         });
@@ -111,9 +221,9 @@ describe('paths method', function() {
             });
             relFiles.should.eql([
                     'testdir/file1.txt',
-                    'testdir/file2.txt',
+                    'testdir/file2.text',
                     'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.txt'
+                    'testdir/subdir/file4.text'
             ]);
             relPaths.length.should.equal(1);
             relPaths[0].should.equal('testdir/subdir');
@@ -131,9 +241,9 @@ describe('paths method', function() {
                 });
                 relPaths.should.eql([
                         'testdir/file1.txt',
-                        'testdir/file2.txt',
+                        'testdir/file2.text',
                         'testdir/subdir/file3.txt',
-                        'testdir/subdir/file4.txt',
+                        'testdir/subdir/file4.text',
                         'testdir/subdir'
                 ]);
             });
