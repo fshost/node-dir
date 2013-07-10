@@ -1,0 +1,4 @@
+test/
+.git*
+.DS_Store
+test.js
