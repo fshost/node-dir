@@ -15,7 +15,10 @@ Valid options are:
 - encoding: file encoding (defaults to 'utf8')
 - match: a regex pattern to specify filenames to operate on
 - exclude: a regex pattern to specify filenames to ignore
+- matchDir: a regex pattern to specify directories to recurse 
+- excludeDir: a regex pattern to specify directories to ignore
 - shortName: whether to aggregate only the base filename rather than the full filepath
+- recursive: whether to recurse subdirectories when reading files.  The default is true.
 
 ```javascript
 dir.readFiles(__dirname,

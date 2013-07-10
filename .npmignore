@@ -1,4 +1,8 @@
-test/
-.git*
 .DS_Store
+
+.git*
+
+test
 test.js
+
+npm-debug.log

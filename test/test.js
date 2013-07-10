@@ -5,7 +5,9 @@ var expect = chai.expect;
 chai.should();
 
 var dir = require('..'),
-    tdir = __dirname + '/testdir';
+    fixturesDir = path.join(__dirname, 'fixtures'),
+    tdir = path.join(fixturesDir, 'testdir'),
+    tdir2 = path.join(fixturesDir, 'testdir2');
 
 describe('readfiles method', function() {
 
@@ -23,15 +25,15 @@ describe('readfiles method', function() {
         }, function(err, files) {
             expect(err).to.equal(null);
             var relFiles = files.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
-            relFiles.should.eql([
+            relFiles.sort().should.eql([
                     'testdir/file1.txt',
                     'testdir/file2.text',
                     'testdir/subdir/file3.txt',
                     'testdir/subdir/file4.text'
             ]);
-            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
             done();
         });
     });
@@ -49,7 +51,7 @@ describe('readfiles method', function() {
             next();
         }, function(err, files) {
             expect(err).to.equal(null);
-            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
             done();
         });
     });
@@ -69,7 +71,7 @@ describe('readfiles method', function() {
             next();
         }, function(err, files) {
             expect(err).to.equal(null);
-            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
             done();
         });
     });
@@ -90,7 +92,34 @@ describe('readfiles method', function() {
             next();
         }, function(err, files) {
             expect(err).to.equal(null);
-            filenames.should.eql(['file1.txt', 'file2.text', 'file3.txt', 'file4.text']);
+            filenames.sort().should.eql(['file1.txt', 'file2.text', 'file3.txt', 'file4.text']);
+            done();
+        });
+    });
+
+    it('if recursive option is set to false, should not read files in subdirectories', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+            recursive: false
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            filenames.push(shortName);
+            content.should.equal(expected);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            var relFiles = files.map(function(curPath) {
+                return path.relative(fixturesDir, curPath);
+            });
+            relFiles.sort().should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text'
+            ]);
+            filenames.sort().should.eql(['file1', 'file2']);
             done();
         });
     });
@@ -110,7 +139,7 @@ describe('readfiles method', function() {
             next();
         }, function(err, files) {
             expect(err).to.equal(null);
-            filenames.should.eql(['file1', 'file3']);
+            filenames.sort().should.eql(['file1', 'file3']);
             done();
         });
     });
@@ -131,15 +160,15 @@ describe('readfiles method', function() {
         }, function(err, files) {
             expect(err).to.equal(null);
             var relFiles = files.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
-            relFiles.should.eql([
+            relFiles.sort().should.eql([
                     'testdir/file1.txt',
                     'testdir/file2.text',
                     'testdir/subdir/file3.txt',
                     'testdir/subdir/file4.text'
             ]);
-            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
             done();
         });
     });
@@ -160,15 +189,15 @@ describe('readfiles method', function() {
         }, function(err, files) {
             expect(err).to.equal(null);
             var relFiles = files.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
-            relFiles.should.eql([
+            relFiles.sort().should.eql([
                     'testdir/file1.txt',
                     'testdir/file2.text',
                     'testdir/subdir/file3.txt',
                     'testdir/subdir/file4.text'
             ]);
-            filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+            filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
             done();
         });
     });
@@ -188,7 +217,47 @@ describe('readfiles method', function() {
             next();
         }, function(err, files) {
             expect(err).to.equal(null);
-            filenames.should.eql(['file1', 'file3']);
+            filenames.sort().should.eql(['file1', 'file3']);
+            done();
+        });
+    });
+
+    it('if given a matchDir option, should only read files in subdirectories that match it', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir2, {
+            matchDir: /special/i
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            content.should.equal(expected);
+            filenames.push(shortName);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            filenames.sort().should.eql(['file3', 'file4']);
+            done();
+        });
+    });
+
+    it('if given an excludeDir option, should only read files that are not in subdirectories that match the exclude pattern', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir2, {
+            excludeDir: /^\./
+        }, function(err, content, filename, next) {
+            expect(err).to.equal(null);
+            content = content.replace(/\r/g, '');
+            var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+            var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+            content.should.equal(expected);
+            filenames.push(shortName);
+            next();
+        }, function(err, files) {
+            expect(err).to.equal(null);
+            filenames.sort().should.eql(['file2', 'file3', 'file4']);
             done();
         });
     });
@@ -217,16 +286,13 @@ describe('readfiles method', function() {
         });
     });
 
-});
-
-describe('readFiles method', function() {
     it('should pass the name and content of every filepath in a directory and subdirectories to a callback, and pass an array of the filepaths of every file in a directory and its subdirectories to a callback when complete', function(done) {
         dir.files(tdir, function(err, files) {
             expect(err).to.equal(null);
             var relFiles = files.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
-            relFiles.should.eql([
+            relFiles.sort().should.eql([
                     'testdir/file1.txt',
                     'testdir/file2.text',
                     'testdir/subdir/file3.txt',
@@ -235,14 +301,19 @@ describe('readFiles method', function() {
             done();
         });
     });
+
 });
+
+
+
+
 
 describe('subdirs method', function() {
     it('should pass an array of the subdir paths of every subdir in a directory (recursive) to a callback', function(done) {
         dir.subdirs(tdir, function(err, dirs) {
             expect(err).to.equal(null);
             var relPaths = dirs.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
             relPaths.length.should.equal(1);
             relPaths[0].should.equal('testdir/subdir');
@@ -261,16 +332,16 @@ describe('paths method', function() {
             expect(paths.files).to.exist;
             expect(paths.dirs).to.exist;
             var relFiles = paths.files.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
             var relPaths = paths.dirs.map(function(curPath) {
-                return path.relative(__dirname, curPath);
+                return path.relative(fixturesDir, curPath);
             });
-            relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+            relFiles.sort().should.eql([
+                'testdir/file1.txt',
+                'testdir/file2.text',
+                'testdir/subdir/file3.txt',
+                'testdir/subdir/file4.text'
             ]);
             relPaths.length.should.equal(1);
             relPaths[0].should.equal('testdir/subdir');
@@ -279,23 +350,25 @@ describe('paths method', function() {
     });
 
     describe('when called with combine argument set to true', function() {
-        it(' should pass an array of filepaths of all subdirs and files in a directory and its subdirs to a callback', function(done) {
+
+        it('should pass an array of filepaths of all subdirs and files in a directory and its subdirs to a callback', function(done) {
             dir.paths(tdir, true, function(err, paths) {
                 expect(err).to.equal(null);
                 paths.should.be.an('array');
                 var relPaths = paths.map(function(curPath) {
-                    return path.relative(__dirname, curPath);
+                    return path.relative(fixturesDir, curPath);
                 });
-                relPaths.should.eql([
-                        'testdir/file1.txt',
-                        'testdir/file2.text',
-                        'testdir/subdir/file3.txt',
-                        'testdir/subdir/file4.text',
-                        'testdir/subdir'
+                relPaths.sort().should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text',
+                    'testdir/subdir',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.text'
                 ]);
             });
             done();
         });
+
     });
 
 });
