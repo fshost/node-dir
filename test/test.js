@@ -286,7 +286,12 @@ describe('readfiles method', function() {
         });
     });
 
-    it('should pass the name and content of every filepath in a directory and subdirectories to a callback, and pass an array of the filepaths of every file in a directory and its subdirectories to a callback when complete', function(done) {
+});
+
+
+describe("files method", function() {
+
+    it("should iterate the files of a directory (recursively) and pass their filenames to a callback", function (done) {
         dir.files(tdir, function(err, files) {
             expect(err).to.equal(null);
             var relFiles = files.map(function(curPath) {
@@ -303,8 +308,6 @@ describe('readfiles method', function() {
     });
 
 });
-
-
 
 
 
