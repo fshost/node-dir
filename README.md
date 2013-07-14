@@ -19,6 +19,11 @@ Valid options are:
 - excludeDir: a regex pattern to specify directories to ignore
 - shortName: whether to aggregate only the base filename rather than the full filepath
 - recursive: whether to recurse subdirectories when reading files.  The default is true.
+- sort: sort files in each directory in ascending order (defaults to true).
+- reverse: sort files in each directory in descending order.
+
+note that a reverse sort can also be achieved by setting the sort option to 'reverse', 'desc', or 'descending' string value.
+
 
 ```javascript
 dir.readFiles(__dirname,
