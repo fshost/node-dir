@@ -1,9 +1,10 @@
 {	
 	"name"    : "node-dir",
-	"version" : "0.1.2",
+	"version" : "0.1.3",
 	"description" : "asynchronous file and directory operations for Node.js",
 	"main"    : "index",
 	"homepage": "https://github.com/fshost",
+	"repository": "https://github.com/fshost/node-dir",
 	"author"  : {
 			"name"  : "Nathan Cartwright",
 			"email" : "fshost@yahoo.com",
