@@ -1,8 +1,11 @@
 ﻿var path = require('path');
 
-var chai = require('chai');
-var expect = chai.expect;
-chai.should();
+// var chai = require('chai');
+// var expect = chai.expect;
+// chai.should();
+
+
+var should = require('should');
 
 var dir = require('..'),
     fixturesDir = path.join(__dirname, 'fixtures'),
@@ -11,23 +14,33 @@ var dir = require('..'),
 
 describe('readfiles method', function() {
 
-    it('should exec a callback on every file contents and exec a done callback', function(done) {
+    it('should pass the contents of every file to a callback', function(done) {
+        dir.readFiles(
+            tdir, function(err, content, filename, next) {
+                should.not.exist(err);
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.replace(/\r/g, '').should.equal(expected);
+                next();
+            }, function() {
+                done();
+            });
+    });
+
+    it('should invoke a done callback after processing all files', function(done) {
         var filenames = [];
         dir.readFiles(
             tdir, function(err, content, filename, next) {
-                expect(err).to.equal(null);
-                content = content.replace(/\r/g, '');
+                should.not.exist(err);
+                should.exist(content);
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
-                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
                 filenames.push(shortName);
-                content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
-                var relFiles = files.map(function(curPath) {
+                should.not.exist(err);
+                files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
-                });
-                relFiles.sort().should.eql([
+                }).sort().should.eql([
                     'testdir/file1.txt',
                     'testdir/file2.text',
                     'testdir/subdir/file3.txt',
@@ -44,7 +57,7 @@ describe('readfiles method', function() {
             tdir, {
                 sort: true
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -52,7 +65,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -73,7 +86,7 @@ describe('readfiles method', function() {
             tdir, {
                 sort: true
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -81,7 +94,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -102,7 +115,7 @@ describe('readfiles method', function() {
             tdir, {
                 reverse: true
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -110,7 +123,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -130,10 +143,10 @@ describe('readfiles method', function() {
         dir.readFiles(
             tdir, {
                 filter: function(filename) {
-                    return ~filename.search('file1') || ~filename.search('file2');
+                    return~ filename.search('file1') || ~filename.search('file2');
                 }
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -141,7 +154,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -158,7 +171,7 @@ describe('readfiles method', function() {
         var filenames = [];
         dir.readFiles(
             tdir, 'ascii', function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -166,7 +179,7 @@ describe('readfiles method', function() {
                 filenames.push(shortName);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
             });
@@ -178,7 +191,7 @@ describe('readfiles method', function() {
             tdir, {
                 encoding: 'ascii'
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -186,7 +199,7 @@ describe('readfiles method', function() {
                 filenames.push(shortName);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
             });
@@ -198,7 +211,7 @@ describe('readfiles method', function() {
             tdir, {
                 shortName: true
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 path.basename(filename).should.equal(filename);
                 var shortName = filename.replace(new RegExp(path.extname(filename) + '$'), '');
@@ -207,7 +220,7 @@ describe('readfiles method', function() {
                 filenames.push(filename);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file1.txt', 'file2.text', 'file3.txt', 'file4.text']);
                 done();
             });
@@ -219,7 +232,7 @@ describe('readfiles method', function() {
             tdir, {
                 recursive: false
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -227,7 +240,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -246,7 +259,7 @@ describe('readfiles method', function() {
             tdir, {
                 match: /txt$/
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -254,7 +267,7 @@ describe('readfiles method', function() {
                 filenames.push(shortName);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file1', 'file3']);
                 done();
             });
@@ -266,7 +279,7 @@ describe('readfiles method', function() {
             tdir, {
                 match: /^file/
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -274,7 +287,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -295,7 +308,7 @@ describe('readfiles method', function() {
             tdir, {
                 match: /^file/
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -303,7 +316,7 @@ describe('readfiles method', function() {
                 content.should.equal(expected);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 var relFiles = files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
@@ -324,7 +337,7 @@ describe('readfiles method', function() {
             tdir, {
                 exclude: /text$/
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -332,7 +345,7 @@ describe('readfiles method', function() {
                 filenames.push(shortName);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file1', 'file3']);
                 done();
             });
@@ -344,7 +357,7 @@ describe('readfiles method', function() {
             tdir2, {
                 matchDir: /special/i
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -352,7 +365,7 @@ describe('readfiles method', function() {
                 filenames.push(shortName);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file3', 'file4']);
                 done();
             });
@@ -364,7 +377,7 @@ describe('readfiles method', function() {
             tdir2, {
                 excludeDir: /^\./
             }, function(err, content, filename, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 content = content.replace(/\r/g, '');
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -372,7 +385,7 @@ describe('readfiles method', function() {
                 filenames.push(shortName);
                 next();
             }, function(err, files) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 filenames.sort().should.eql(['file2', 'file3', 'file4']);
                 done();
             });
@@ -381,12 +394,12 @@ describe('readfiles method', function() {
     it('can be called with a callback in which the filename argument is omitted', function(done) {
         dir.readFiles(
             tdir, function(err, content, next) {
-                expect(err).to.equal(null);
-                content.should.be.a('string');
+                should.not.exist(err);
+                content.should.be.a.string;
                 content.indexOf('begin content of').should.equal(0);
                 next();
             }, function(err) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 done();
             });
     });
@@ -395,7 +408,7 @@ describe('readfiles method', function() {
         var i = 0;
         dir.readFiles(
             tdir, function(err, content, next) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 next();
                 i++;
                 if (i === 4) done();
@@ -409,7 +422,7 @@ describe("files method", function() {
 
     it("should iterate the files of a directory (recursively) and pass their filenames to a callback", function(done) {
         dir.files(tdir, function(err, files) {
-            expect(err).to.equal(null);
+            should.not.exist(err);
             var relFiles = files.map(function(curPath) {
                 return path.relative(fixturesDir, curPath);
             });
@@ -430,7 +443,7 @@ describe("files method", function() {
 describe('subdirs method', function() {
     it('should pass an array of the subdir paths of every subdir in a directory (recursive) to a callback', function(done) {
         dir.subdirs(tdir, function(err, dirs) {
-            expect(err).to.equal(null);
+            should.not.exist(err);
             var relPaths = dirs.map(function(curPath) {
                 return path.relative(fixturesDir, curPath);
             });
@@ -445,11 +458,11 @@ describe('subdirs method', function() {
 describe('paths method', function() {
     it('should pass an object with a files property and dirs property of the paths of every file and subdir, respectively, in a directory (recursive) to a callback', function(done) {
         dir.paths(tdir, function(err, paths) {
-            expect(err).to.equal(null);
-            paths.should.be.an('object');
-            paths.should.not.be.an('array');
-            expect(paths.files).to.exist;
-            expect(paths.dirs).to.exist;
+            should.not.exist(err);
+            paths.should.be.a.object;
+            paths.should.not.be.a.array;
+            should.exist(paths.files);
+            should.exist(paths.dirs);
             var relFiles = paths.files.map(function(curPath) {
                 return path.relative(fixturesDir, curPath);
             });
@@ -472,7 +485,7 @@ describe('paths method', function() {
 
         it('should pass an array of filepaths of all subdirs and files in a directory and its subdirs to a callback', function(done) {
             dir.paths(tdir, true, function(err, paths) {
-                expect(err).to.equal(null);
+                should.not.exist(err);
                 paths.should.be.an('array');
                 var relPaths = paths.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);

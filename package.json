@@ -34,7 +34,6 @@
   ],
   "devDependencies": {
     "mocha": "~1.13.0",
-    "should": "~2.0.2",
-    "expect.js": "~0.2.0"
+    "should": "~2.0.2"
   }
 }
