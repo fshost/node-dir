@@ -1,5 +1,0 @@
-language: node_js
-
-# test on node.js version 0.10.x
-node_js:
-  - 0.10
