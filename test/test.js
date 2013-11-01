@@ -1,13 +1,6 @@
-﻿var path = require('path');
-
-// var chai = require('chai');
-// var expect = chai.expect;
-// chai.should();
-
-
-var should = require('should');
-
-var dir = require('..'),
+﻿var path = require('path'),
+    should = require('should'),
+    dir = require('..'),
     fixturesDir = path.join(__dirname, 'fixtures'),
     tdir = path.join(fixturesDir, 'testdir'),
     tdir2 = path.join(fixturesDir, 'testdir2');
@@ -486,7 +479,7 @@ describe('paths method', function() {
         it('should pass an array of filepaths of all subdirs and files in a directory and its subdirs to a callback', function(done) {
             dir.paths(tdir, true, function(err, paths) {
                 should.not.exist(err);
-                paths.should.be.an('array');
+                paths.should.be.a('array');
                 var relPaths = paths.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
