@@ -1,5 +1,7 @@
+[![Build Status](https://secure.travis-ci.org/fshost/node-dir.png)](http://travis-ci.org/fshost/node-dir)
+
 # node-dir
-A small node.js module to provide some convenience methods for asynchronous, non-blocking, recursive directory operations like being able to get an array of all files, subdirectories, or both (with the option to either combine or separate the results), and for sequentially reading and processing the contents all files in a directory recursively, optionally firing a callback when finished.
+A small node.js module to provide some convenience methods for asynchronous, non-blocking, recursive directory operations like being able to get an array of all files, subdirectories, or both (with the option to either combine or separate the results), and for sequentially reading and processing the contents all files in a directory recursively, optionally invoking a callback after all files have been processed.
 
 #### methods
 For the sake of brevity, assume that the following line of code precedes all of the examples.
