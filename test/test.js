@@ -479,7 +479,8 @@ describe('paths method', function() {
         it('should pass an array of filepaths of all subdirs and files in a directory and its subdirs to a callback', function(done) {
             dir.paths(tdir, true, function(err, paths) {
                 should.not.exist(err);
-                paths.should.be.a('array');
+
+                paths.should.be.a.array;
                 var relPaths = paths.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 });
