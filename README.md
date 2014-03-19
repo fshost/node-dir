@@ -59,6 +59,20 @@ dir.readFiles(__dirname, {
         console.log('finished reading files:',files);
     });
 
+// exclude an array of subdirectory names
+dir.readFiles(__dirname, {
+    exclude: ['node_modules', 'test']
+    }, function(err, content, next) {
+        if (err) throw err;
+        console.log('content:', content);
+        next();
+    },
+    function(err, files){
+        if (err) throw err;
+        console.log('finished reading files:',files);
+    });
+
+
 // the callback for each file can optionally have a filename argument as its 3rd parameter
 // and the finishedCallback argument is optional, e.g.
 dir.readFiles(__dirname, function(err, content, filename, next) {
