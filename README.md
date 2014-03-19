@@ -19,19 +19,21 @@ Sequentially read the content of each file in a directory, passing the contents 
 
 Valid options are:
 - encoding: file encoding (defaults to 'utf8')
-- match: a regex pattern to specify filenames to operate on
-- exclude: a regex pattern to specify filenames to ignore
-- matchDir: a regex pattern to specify directories to recurse 
-- excludeDir: a regex pattern to specify directories to ignore
+- exclude: a regex pattern or array to specify filenames to ignore
+- excludeDir: a regex pattern or array to specify directories to ignore
+- match: a regex pattern or array to specify filenames to operate on
+- matchDir: a regex pattern or array to specify directories to recurse 
+- recursive: whether to recurse subdirectories when reading files (defaults to true)
+- reverse: sort files in each directory in descending order
 - shortName: whether to aggregate only the base filename rather than the full filepath
-- recursive: whether to recurse subdirectories when reading files.  The default is true.
-- sort: sort files in each directory in ascending order (defaults to true).
-- reverse: sort files in each directory in descending order.
+- sort: sort files in each directory in ascending order (defaults to true)
 
-note that a reverse sort can also be achieved by setting the sort option to 'reverse', 'desc', or 'descending' string value.
+A reverse sort can also be achieved by setting the sort option to 'reverse', 'desc', or 'descending' string value.
 
+examples
 
 ```javascript
+// display contents of files in this script's directory
 dir.readFiles(__dirname,
     function(err, content, next) {
         if (err) throw err;
@@ -40,7 +42,7 @@ dir.readFiles(__dirname,
     },
     function(err, files){
         if (err) throw err;
-        console.log('finished reading files:',files);
+        console.log('finished reading files:', files);
     });
 
 // match only filenames with a .txt extension and that don't start with a `.´

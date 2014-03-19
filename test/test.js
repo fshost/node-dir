@@ -246,7 +246,7 @@ describe('readfiles method', function() {
             });
     });
 
-    it('if given a match option, should only read files that match it', function(done) {
+    it('if given a match regex option, should only read files that match it', function(done) {
         var filenames = [];
         dir.readFiles(
             tdir, {
@@ -266,7 +266,27 @@ describe('readfiles method', function() {
             });
     });
 
-    it('match option should match pattern only to the filename itself, not the full filepath', function(done) {
+    it('if given a match array option, should only read files that match an item in the array', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+                match: ['file1.txt', 'file3.txt']
+            }, function(err, content, filename, next) {
+                should.not.exist(err);
+                content = content.replace(/\r/g, '');
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.should.equal(expected);
+                filenames.push(shortName);
+                next();
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file3']);
+                done();
+            });
+    });
+
+    it('match option should match regex pattern only to the filename itself, not the full filepath', function(done) {
         var filenames = [];
         dir.readFiles(
             tdir, {
@@ -295,36 +315,7 @@ describe('readfiles method', function() {
             });
     });
 
-    it('if match option should match pattern only to the filename itself, not the full filepath', function(done) {
-        var filenames = [];
-        dir.readFiles(
-            tdir, {
-                match: /^file/
-            }, function(err, content, filename, next) {
-                should.not.exist(err);
-                content = content.replace(/\r/g, '');
-                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
-                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
-                filenames.push(shortName);
-                content.should.equal(expected);
-                next();
-            }, function(err, files) {
-                should.not.exist(err);
-                var relFiles = files.map(function(curPath) {
-                    return path.relative(fixturesDir, curPath);
-                });
-                relFiles.sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
-                ]);
-                filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
-                done();
-            });
-    });
-
-    it('if given an exclude option, should only read files that do not match the exclude pattern', function(done) {
+    it('if given an exclude regex option, should only read files that do not match the exclude pattern', function(done) {
         var filenames = [];
         dir.readFiles(
             tdir, {
@@ -344,7 +335,27 @@ describe('readfiles method', function() {
             });
     });
 
-    it('if given a matchDir option, should only read files in subdirectories that match it', function(done) {
+    it('if given an exclude array option, should only read files that do not match any items in the array', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir, {
+                exclude: ['file2.text', 'file4.text']
+            }, function(err, content, filename, next) {
+                should.not.exist(err);
+                content = content.replace(/\r/g, '');
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.should.equal(expected);
+                filenames.push(shortName);
+                next();
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file3']);
+                done();
+            });
+    });
+
+    it('if given a matchDir regex option, should only read files in subdirectories that match it', function(done) {
         var filenames = [];
         dir.readFiles(
             tdir2, {
@@ -364,11 +375,51 @@ describe('readfiles method', function() {
             });
     });
 
-    it('if given an excludeDir option, should only read files that are not in subdirectories that match the exclude pattern', function(done) {
+    it('if given a matchDir array option, should only read files in subdirectories that match an item in the array', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir2, {
+                matchDir: ['special_files', 'nonexistent']
+            }, function(err, content, filename, next) {
+                should.not.exist(err);
+                content = content.replace(/\r/g, '');
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.should.equal(expected);
+                filenames.push(shortName);
+                next();
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if given an excludeDir regex option, should only read files that are not in subdirectories that match the exclude pattern', function(done) {
         var filenames = [];
         dir.readFiles(
             tdir2, {
                 excludeDir: /^\./
+            }, function(err, content, filename, next) {
+                should.not.exist(err);
+                content = content.replace(/\r/g, '');
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.should.equal(expected);
+                filenames.push(shortName);
+                next();
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if given an excludeDir array option, should only read files that are in subdirectories that do not match any item in the array', function(done) {
+        var filenames = [];
+        dir.readFiles(
+            tdir2, {
+                excludeDir: ['.bin', '.nonexistent']
             }, function(err, content, filename, next) {
                 should.not.exist(err);
                 content = content.replace(/\r/g, '');
