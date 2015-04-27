@@ -92,6 +92,27 @@ dir.files(__dirname, function(err, files) {
 });
 ```
 
+Note that for the files and subdirs the object returned is an array, and thus all of the standard array methods are available for use in your callback for operations like filters or sorting. Some quick examples:
+
+```javascript
+dir.files(__dirname, function(err, files) {
+    if (err) throw err;
+    // sort ascending
+    files.sort();
+    // sort descending
+    files.reverse();
+    // include only certain filenames
+    files = files.filter(function (file) {
+       return ['allowed', 'file', 'names'].indexOf(file) > -1;
+    });
+    // exclude some filenames
+    files = files.filter(function (file) {
+        return ['exclude', 'these', 'files'].indexOf(file) === -1;
+    });
+});
+```
+
+Also note that if you need to work with the contents of the files asynchronously, please use the readFiles method.  The files and subdirs methods are for getting a list of the files or subdirs in a directory as an array.
         
 #### subdirs( dir, callback )
 Asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of directory paths to a callback.
@@ -102,7 +123,6 @@ dir.subdirs(__dirname, function(err, subdirs) {
     console.log(subdirs);
 });
 ```
-
 
 #### paths(dir, [combine], callback )
 Asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of both file and directory paths to a callback.
