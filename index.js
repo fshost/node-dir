@@ -7,3 +7,4 @@ for (key in dirpaths) {
 }
 
 exports.readFiles = require(path.join(__dirname, 'lib', 'readfiles'));
+exports.readFilesStream = require(path.join(__dirname, 'lib', 'readfilesstream'));
