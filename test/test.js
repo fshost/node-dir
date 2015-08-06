@@ -461,6 +461,594 @@ describe('readfiles method', function() {
 
 });
 
+describe('readfilesstream method', function() {
+
+    it('should pass the stream of every file to a callback', function(done) {
+        dir.readFilesStream(
+            tdir, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                var content = '';
+                stream.on('data',function(buffer) {
+                  var part = buffer.toString();
+                  content += part;
+                });
+                stream.on('end',function() {
+                  content.replace(/\r/g, '').should.equal(expected);
+                  next();
+                });
+                
+            }, function() {
+                done();
+            });
+    });
+    it('should invoke a done callback after processing all files', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, function(err, stream, filename, next) {
+                should.not.exist(err);
+                should.exist(stream);
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                filenames.push(shortName);
+                next();
+            }, function(err, files) {
+                should.not.exist(err);
+                files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                }).sort().should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.text'
+                ]);
+                filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('should read files in sorted order if the sort option is set to true', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                sort: true
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                //content = content.replace(/\r/g, '');
+                var content = '';
+                stream.on('data',function(buffer) {
+                  var part = buffer.toString();
+                  content += part;
+                });
+                stream.on('end',function() {
+                  content = content.replace(/\r/g, '');
+                  var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                  var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                  filenames.push(shortName);
+                  content.should.equal(expected);
+                  next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                var relFiles = files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                });
+                relFiles.should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.text'
+                ]);
+                filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('should read files in sorted order (per directory) if the sort option is set to true', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                sort: true
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                  var part = buffer.toString();
+                  content += part;
+                });
+                stream.on('end',function() {
+                  content = content.replace(/\r/g, '');
+                  var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                  var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                  filenames.push(shortName);
+                  content.should.equal(expected);
+                  next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                var relFiles = files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                });
+                relFiles.should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.text'
+                ]);
+                filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('should read files in reverse order (per directory) if the reverse option is set to true', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                reverse: true
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                  var part = buffer.toString();
+                  content += part;
+                });
+                stream.on('end',function() {
+                  content = content.replace(/\r/g, '');
+                  var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                  var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                  filenames.push(shortName);
+                  content.should.equal(expected);
+                  next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                var relFiles = files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                });
+                relFiles.should.eql([
+                    'testdir/subdir/file4.text',
+                    'testdir/subdir/file3.txt',
+                    'testdir/file2.text',
+                    'testdir/file1.txt'
+                ]);
+                filenames.should.eql(['file4', 'file3', 'file2', 'file1']);
+                done();
+            });
+    });
+
+    it('should apply a filter to the files if a filter option is specified', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                filter: function(filename) {
+                    return~ filename.search('file1') || ~filename.search('file2');
+                }
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    filenames.push(shortName);
+                    content.should.equal(expected);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                var relFiles = files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                });
+                relFiles.should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text'
+                ]);
+                filenames.should.eql(['file1', 'file2']);
+                done();
+            });
+    });
+
+    it('should accept an string argument that can specify encoding', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, 'ascii', function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('should accept an options argument that can specify encoding', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                encoding: 'ascii'
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if shortName option is true, only aggregate the base filename rather than the full filepath', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                shortName: true
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    path.basename(filename).should.equal(filename);
+                    var shortName = filename.replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(filename);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1.txt', 'file2.text', 'file3.txt', 'file4.text']);
+                done();
+            });
+    });
+
+    it('if recursive option is set to false, should not read files in subdirectories', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                recursive: false
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    filenames.push(shortName);
+                    content.should.equal(expected);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                var relFiles = files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                });
+                relFiles.sort().should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text'
+                ]);
+                filenames.sort().should.eql(['file1', 'file2']);
+                done();
+            });
+    });
+
+    it('if given a match regex option, should only read files that match it', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                match: /txt$/
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file3']);
+                done();
+            });
+    });
+
+    it('if given a match array option, should only read files that match an item in the array', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                match: ['file1.txt', 'file3.txt']
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                  content = content.replace(/\r/g, '');
+                  var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                  var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                  content.should.equal(expected);
+                  filenames.push(shortName);
+                  next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file3']);
+                done();
+            });
+    });
+
+    it('match option should match regex pattern only to the filename itself, not the full filepath', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                match: /^file/
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    filenames.push(shortName);
+                    content.should.equal(expected);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                var relFiles = files.map(function(curPath) {
+                    return path.relative(fixturesDir, curPath);
+                });
+                relFiles.sort().should.eql([
+                    'testdir/file1.txt',
+                    'testdir/file2.text',
+                    'testdir/subdir/file3.txt',
+                    'testdir/subdir/file4.text'
+                ]);
+                filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if given an exclude regex option, should only read files that do not match the exclude pattern', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                exclude: /text$/
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file3']);
+                done();
+            });
+    });
+
+    it('if given an exclude array option, should only read files that do not match any items in the array', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir, {
+                exclude: ['file2.text', 'file4.text']
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file1', 'file3']);
+                done();
+            });
+    });
+
+    it('if given a matchDir regex option, should only read files in subdirectories that match it', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir2, {
+                matchDir: /special/i
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if given a matchDir array option, should only read files in subdirectories that match an item in the array', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir2, {
+                matchDir: ['special_files', 'nonexistent']
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if given an excludeDir regex option, should only read files that are not in subdirectories that match the exclude pattern', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir2, {
+                excludeDir: /^\./
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                  content = content.replace(/\r/g, '');
+                  var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                  var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                  content.should.equal(expected);
+                  filenames.push(shortName);
+                  next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('if given an excludeDir array option, should only read files that are in subdirectories that do not match any item in the array', function(done) {
+        var filenames = [];
+        dir.readFilesStream(
+            tdir2, {
+                excludeDir: ['.bin', '.nonexistent']
+            }, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err, files) {
+                should.not.exist(err);
+                filenames.sort().should.eql(['file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('can be called with a callback in which the filename argument is omitted', function(done) {
+        dir.readFilesStream(
+            tdir, function(err, stream, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                  content.should.be.a.string;
+                  content.indexOf('begin content of').should.equal(0);
+                  next();
+                });
+            }, function(err) {
+                should.not.exist(err);
+                done();
+            });
+    });
+
+    it('can be called with the done callback argument omitted', function(done) {
+        var i = 0;
+        dir.readFilesStream(
+            tdir, function(err, stream, next) {
+                should.not.exist(err);
+                next();
+                i++;
+                if (i === 4) done();
+            });
+    });
+});
 
 describe("files method", function() {
 
