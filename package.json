@@ -32,6 +32,9 @@
     "Node.js",
     "fs"
   ],
+  "dependencies": {
+    "minimatch": "~2.0.10"
+  },
   "devDependencies": {
     "mocha": "~1.13.0",
     "should": "~2.0.2"
