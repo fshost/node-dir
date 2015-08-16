@@ -27,6 +27,7 @@ Valid options are:
 - reverse: sort files in each directory in descending order
 - shortName: whether to aggregate only the base filename rather than the full filepath
 - sort: sort files in each directory in ascending order (defaults to true)
+- doneOnErr: control if done function called on error (defaults to true)
 
 A reverse sort can also be achieved by setting the sort option to 'reverse', 'desc', or 'descending' string value.
 

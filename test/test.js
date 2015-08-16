@@ -3,7 +3,8 @@
     dir = require('..'),
     fixturesDir = path.join(__dirname, 'fixtures'),
     tdir = path.join(fixturesDir, 'testdir'),
-    tdir2 = path.join(fixturesDir, 'testdir2');
+    tdir2 = path.join(fixturesDir, 'testdir2'),
+    tdir3 = path.join(fixturesDir, 'testdir3');
 
 describe('readfiles method', function() {
 
@@ -431,6 +432,33 @@ describe('readfiles method', function() {
             }, function(err, files) {
                 should.not.exist(err);
                 filenames.sort().should.eql(['file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('should done on error', function(done) {
+        dir.readFiles(
+            tdir3, function(err, content, filename, next) {
+                should.not.exist(err);
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.replace(/\r/g, '').should.equal(expected);
+                next();
+            }, function(err) {
+                should.exist(err);
+                done();
+            });
+    });
+
+    it('if given doneOnErr to false, should not done on error', function(done) {
+        dir.readFiles(
+            tdir3, { doneOnErr: false },function(err, content, filename, next) {
+                should.not.exist(err);
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                content.replace(/\r/g, '').should.equal(expected);
+                next();
+            }, function() {
                 done();
             });
     });
@@ -1014,6 +1042,49 @@ describe('readfilesstream method', function() {
             }, function(err, files) {
                 should.not.exist(err);
                 filenames.sort().should.eql(['file2', 'file3', 'file4']);
+                done();
+            });
+    });
+
+    it('should done on error', function(done) {
+        dir.readFilesStream(
+            tdir3, function(err, stream, filename, next) {
+                should.not.exist(err);
+                var content = '';
+                stream.on('data',function(buffer) {
+                    var part = buffer.toString();
+                    content += part;
+                });
+                stream.on('end',function() {
+                    content = content.replace(/\r/g, '');
+                    var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                    var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                    content.should.equal(expected);
+                    filenames.push(shortName);
+                    next();
+                });
+            }, function(err) {
+                should.exist(err);
+                done();
+            });
+    });
+
+    it('if given doneOnErr to false, should not done on error', function(done) {
+        dir.readFilesStream(
+            tdir3, { doneOnErr: false },function(err, stream, filename, next) {
+                should.not.exist(err);
+                var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
+                var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
+                var content = '';
+                stream.on('data',function(buffer) {
+                  var part = buffer.toString();
+                  content += part;
+                });
+                stream.on('end',function() {
+                  content.replace(/\r/g, '').should.equal(expected);
+                  next();
+                });
+            }, function() {
                 done();
             });
     });
