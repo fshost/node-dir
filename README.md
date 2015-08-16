@@ -15,6 +15,7 @@ var dir = require('node-dir');
 ```
 
 #### readFiles( dir, [options], fileCallback, [finishedCallback] )
+#### readFilesStream( dir, [options], streamCallback, [finishedCallback] )
 Sequentially read the content of each file in a directory, passing the contents to a callback, optionally calling a finished callback when complete.  The options and finishedCallback arguments are not required.
 
 Valid options are:
@@ -40,6 +41,24 @@ dir.readFiles(__dirname,
         if (err) throw err;
         console.log('content:', content);
         next();
+    },
+    function(err, files){
+        if (err) throw err;
+        console.log('finished reading files:', files);
+    });
+
+// display contents of huge files in this script's directory
+dir.readFilesStream(__dirname,
+    function(err, stream, next) {
+        if (err) throw err;
+        var content = '';
+        stream.on('data',function(buffer) {
+            content += buffer.toString();
+        });
+        stream.on('end',function() {
+            console.log('content:', content);
+            next();
+        });
     },
     function(err, files){
         if (err) throw err;
