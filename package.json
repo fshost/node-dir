@@ -1,6 +1,6 @@
 {
   "name": "node-dir",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "asynchronous file and directory operations for Node.js",
   "main": "index",
   "homepage": "https://github.com/fshost",
