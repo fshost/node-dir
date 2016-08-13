@@ -4,7 +4,8 @@
     fixturesDir = path.join(__dirname, 'fixtures'),
     tdir = path.join(fixturesDir, 'testdir'),
     tdir2 = path.join(fixturesDir, 'testdir2'),
-    tdir3 = path.join(fixturesDir, 'testdir3');
+    tdir3 = path.join(fixturesDir, 'testdir3'),
+    tdir4 = path.join(fixturesDir, 'testdir4');
 
 describe('readfiles method', function() {
 
@@ -1134,6 +1135,36 @@ describe("files method", function() {
                 'testdir/file2.text',
                 'testdir/subdir/file3.txt',
                 'testdir/subdir/file4.text'
+            ]);
+            done();
+        });
+    });
+
+    it("should return broken symlinks as files", function(done) {
+        dir.files(tdir3, function(err, files) {
+            should.not.exist(err);
+            var relFiles = files.map(function(curPath) {
+                return path.relative(fixturesDir, curPath);
+            });
+            relFiles.sort().should.eql([
+                'testdir3/broken_link.txt',
+                'testdir3/file1.txt'
+            ]);
+            done();
+        });
+    });
+
+    it("should iterate files of symlinked directories (recursively)", function(done) {
+        dir.files(tdir4, function(err, files) {
+            should.not.exist(err);
+            var relFiles = files.map(function(curPath) {
+                return path.relative(fixturesDir, curPath);
+            });
+            relFiles.sort().should.eql([
+                'testdir4/testdir/file1.txt',
+                'testdir4/testdir/file2.text',
+                'testdir4/testdir/subdir/file3.txt',
+                'testdir4/testdir/subdir/file4.text'
             ]);
             done();
         });
