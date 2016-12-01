@@ -1122,7 +1122,38 @@ describe('readfilesstream method', function() {
     });
 });
 
+it("#promiseFiles", function(done) {
+    dir.promiseFiles(tdir)
+    .then(function(files) {
+        var relFiles = files.map(function(curPath) {
+            return path.relative(fixturesDir, curPath);
+        });
+        relFiles.sort().should.eql([
+            'testdir/file1.txt',
+            'testdir/file2.text',
+            'testdir/subdir/file3.txt',
+            'testdir/subdir/file4.text'
+        ]);
+    })
+    .then(done).catch(done)
+});
+
 describe("files method", function() {
+
+    it("#files(path, {sync:true}", 
+        function() {
+        var files = dir.files(tdir,'file',()=>{},{sync:true});
+        var relFiles = files.map(function(curPath) {
+            return path.relative(fixturesDir, curPath);
+        });
+
+        relFiles.sort().should.eql([
+            'testdir/file1.txt',
+            'testdir/file2.text',
+            'testdir/subdir/file3.txt',
+            'testdir/subdir/file4.text'
+        ]);
+    });
 
     it("should iterate the files of a directory (recursively) and pass their filenames to a callback", function(done) {
         dir.files(tdir, function(err, files) {

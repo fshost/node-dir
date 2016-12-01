@@ -3,9 +3,28 @@
 # node-dir
 A lightweight Node.js module with methods for some common directory and file operations, including asynchronous, non-blocking methods for recursively getting an array of files, subdirectories, or both, and methods for recursively, sequentially reading and processing the contents of files in a directory and its subdirectories, with several options available for added flexibility if needed.
 
+### Table of Contents
+
+- [installation](#installation)
+- [usage](#usage)
+        - [methods](#methods)
+        - [readFiles( dir, options, fileCallback, finishedCallback)](#readfiles-dir-options-filecallback-finishedcallback)
+        - [readFilesStream( dir, options, streamCallback, finishedCallback)](#readfilesstream-dir-options-streamcallback-finishedcallback)
+                - [readFilesStream examples](#readfilesstream-examples)
+        - [files( dir, callback )](#files-dir-callback)
+        - [files( dir, {sync:true} )](#files-dir-synctrue)
+        - [promiseFiles( dir, callback )](#promisefiles-dir-callback)
+        - [subdirs( dir, callback )](#subdirs-dir-callback)
+        - [paths(dir, [combine], callback )](#pathsdir-combine-callback)
+- [API Docs](#api-docs)
+        - [files(dir, type, callback, options)](#filesdir-type-callback-options)
+- [License](#license)
+
 #### installation
 
     npm install node-dir
+
+### usage
 
 #### methods
 For the sake of brevity, assume that the following line of code precedes all of the examples.
@@ -32,7 +51,7 @@ Valid options are:
 
 A reverse sort can also be achieved by setting the sort option to 'reverse', 'desc', or 'descending' string value.
 
-examples
+#### readFilesStream examples
 
 ```javascript
 // display contents of files in this script's directory
@@ -111,6 +130,25 @@ dir.files(__dirname, function(err, files) {
     console.log(files);
 });
 ```
+        
+#### files( dir, {sync:true} )
+Synchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
+    
+```javascript
+var files = dir.files(__dirname, {sync:true});
+console.log(files);
+```
+
+#### promiseFiles( dir, callback )
+Asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
+    
+```javascript
+dir.promiseFiles(__dirname)
+.then((files)=>{
+    console.log(files);
+})
+.catch(e=>console.error(e))
+```
 
 Note that for the files and subdirs the object returned is an array, and thus all of the standard array methods are available for use in your callback for operations like filters or sorting. Some quick examples:
 
@@ -167,6 +205,21 @@ dir.paths(__dirname, true, function(err, paths) {
 });
 ```
 
+## API Docs
+
+### files(dir, type, callback, options)
+
+- **dir** - directory path to read
+- **type**='file'
+    - 'file' returns only file listings
+    - 'dir' returns only directory listings
+    - 'all' returns {dirs:[], files:[]}
+    - 'combine' returns []
+- **callback** - 
+- **options**
+    - **sync**=false - results are returned inline and no callbacks are used
+    - **shortName**=false - instead of fullpath file names, just get the names
+    - **recursive**=true - traverse through all children of given path
 
 ## License
 MIT licensed (See LICENSE.txt)
