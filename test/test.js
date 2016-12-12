@@ -5,7 +5,8 @@
     tdir = path.join(fixturesDir, 'testdir'),
     tdir2 = path.join(fixturesDir, 'testdir2'),
     tdir3 = path.join(fixturesDir, 'testdir3'),
-    tdir4 = path.join(fixturesDir, 'testdir4');
+    tdir4 = path.join(fixturesDir, 'testdir4'),
+    assert = require('assert');
 
 describe('readfiles method', function() {
 
@@ -1122,25 +1123,69 @@ describe('readfilesstream method', function() {
     });
 });
 
-it("#promiseFiles", function(done) {
-    dir.promiseFiles(tdir)
-    .then(function(files) {
-        var relFiles = files.map(function(curPath) {
-            return path.relative(fixturesDir, curPath);
-        });
-        relFiles.sort().should.eql([
-            'testdir/file1.txt',
-            'testdir/file2.text',
-            'testdir/subdir/file3.txt',
-            'testdir/subdir/file4.text'
-        ]);
-    })
-    .then(done).catch(done)
-});
+describe('#promiseFiles',function(){
+    it("#promiseFiles", function(done) {
+        dir.promiseFiles(tdir)
+        .then(function(files) {
+            var relFiles = files.map(function(curPath) {
+                return path.relative(fixturesDir, curPath);
+            });
+            relFiles.sort().should.eql([
+                'testdir/file1.txt',
+                'testdir/file2.text',
+                'testdir/subdir/file3.txt',
+                'testdir/subdir/file4.text'
+            ]);
+        })
+        .then(done).catch(done)
+    });
+
+    it("#promiseFiles(path, {shortName:true})", function(done) {
+        dir.promiseFiles(tdir, {shortName:true})
+        .then(function(files) {
+            assert.deepEqual(files.sort(), [
+                'file1.txt',
+                'file2.text',
+                'file3.txt',
+                'file4.text'
+            ])
+        })
+        .then(done).catch(done)
+    });
+
+    it("#promiseFiles(path, 'combine', {shortName:true})", function(done) {
+        dir.promiseFiles(tdir, 'combine', {shortName:true})
+        .then(function(files) {
+            assert.deepEqual(files.sort(), [
+                'file1.txt',
+                'file2.text',
+                'file3.txt',
+                'file4.text',
+                'subdir'
+            ])
+        })
+        .then(done).catch(done)
+    });
+
+    it("#promiseFiles(path, 'combine', {shortName:'relative'})", function(done) {
+        dir.promiseFiles(tdir, 'combine', {shortName:'relative'})
+        .then(function(files) {
+            assert.deepEqual(files.sort(), [
+                'file1.txt',
+                'file2.text',
+                'subdir',
+                'subdir/file3.txt',
+                'subdir/file4.text'
+            ])
+        })
+        .then(done).catch(done)
+    });
+})
+
 
 describe("files method", function() {
 
-    it("#files(path, {sync:true}", 
+    it("#files(path, {sync:true})", 
         function() {
         var files = dir.files(tdir,'file',()=>{},{sync:true});
         var relFiles = files.map(function(curPath) {

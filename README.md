@@ -7,17 +7,18 @@ A lightweight Node.js module with methods for some common directory and file ope
 
 - [installation](#installation)
 - [usage](#usage)
-        - [methods](#methods)
-        - [readFiles( dir, options, fileCallback, finishedCallback)](#readfiles-dir-options-filecallback-finishedcallback)
-        - [readFilesStream( dir, options, streamCallback, finishedCallback)](#readfilesstream-dir-options-streamcallback-finishedcallback)
-                - [readFilesStream examples](#readfilesstream-examples)
-        - [files( dir, callback )](#files-dir-callback)
-        - [files( dir, {sync:true} )](#files-dir-synctrue)
-        - [promiseFiles( dir, callback )](#promisefiles-dir-callback)
-        - [subdirs( dir, callback )](#subdirs-dir-callback)
-        - [paths(dir, [combine], callback )](#pathsdir-combine-callback)
+    - [methods](#methods)
+    - [readFiles](#readfiles)
+    - [readFilesStream](#readfilesstream)
+        - [readFilesStream examples](#readfilesstream-examples)
+    - [files async](#files-async)
+    - [files sync](#files-sync)
+    - [promiseFiles](#promisefiles)
+    - [subdirs](#subdirs)
+    - [paths](#paths)
 - [API Docs](#api-docs)
-        - [files(dir, type, callback, options)](#filesdir-type-callback-options)
+    - [files](#files-api)
+    - [promiseFiles](#promisefiles-api)
 - [License](#license)
 
 #### installation
@@ -33,9 +34,18 @@ For the sake of brevity, assume that the following line of code precedes all of 
 var dir = require('node-dir');
 ```
 
-#### readFiles( dir, [options], fileCallback, [finishedCallback] )
-#### readFilesStream( dir, [options], streamCallback, [finishedCallback] )
+#### readFiles
+A variation on the method readFilesStream. See usage for [readFilesStream](#readFilesStream)
+```
+readFiles( dir, [options], fileCallback, [finishedCallback] )
+```
+
+#### readFilesStream
 Sequentially read the content of each file in a directory, passing the contents to a callback, optionally calling a finished callback when complete.  The options and finishedCallback arguments are not required.
+
+```
+readFilesStream( dir, [options], streamCallback, [finishedCallback] )
+```
 
 Valid options are:
 - encoding: file encoding (defaults to 'utf8')
@@ -53,8 +63,8 @@ A reverse sort can also be achieved by setting the sort option to 'reverse', 'de
 
 #### readFilesStream examples
 
-```javascript
-// display contents of files in this script's directory
+Display contents of files in this script's directory
+```
 dir.readFiles(__dirname,
     function(err, content, next) {
         if (err) throw err;
@@ -64,9 +74,12 @@ dir.readFiles(__dirname,
     function(err, files){
         if (err) throw err;
         console.log('finished reading files:', files);
-    });
+    }
+);
+```
 
-// display contents of huge files in this script's directory
+Display contents of huge files in this script's directory
+```
 dir.readFilesStream(__dirname,
     function(err, stream, next) {
         if (err) throw err;
@@ -82,9 +95,12 @@ dir.readFilesStream(__dirname,
     function(err, files){
         if (err) throw err;
         console.log('finished reading files:', files);
-    });
+    }
+);
+```
 
-// match only filenames with a .txt extension and that don't start with a `.´
+Match only filenames with a .txt extension and that don't start with a `.´
+```
 dir.readFiles(__dirname, {
     match: /.txt$/,
     exclude: /^\./
@@ -96,9 +112,12 @@ dir.readFiles(__dirname, {
     function(err, files){
         if (err) throw err;
         console.log('finished reading files:',files);
-    });
+    }
+);
+```
 
-// exclude an array of subdirectory names
+Exclude an array of subdirectory names
+```
 dir.readFiles(__dirname, {
     exclude: ['node_modules', 'test']
     }, function(err, content, next) {
@@ -109,19 +128,20 @@ dir.readFiles(__dirname, {
     function(err, files){
         if (err) throw err;
         console.log('finished reading files:',files);
-    });
+    }
+);
+```
 
-
-// the callback for each file can optionally have a filename argument as its 3rd parameter
-// and the finishedCallback argument is optional, e.g.
+The callback for each file can optionally have a filename argument as its 3rd parameter and the finishedCallback argument is optional, e.g.
+```
 dir.readFiles(__dirname, function(err, content, filename, next) {
-        console.log('processing content of file', filename);
-        next();
-    });
+    console.log('processing content of file', filename);
+    next();
+});
 ```
 
         
-#### files( dir, callback )
+#### files async
 Asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
     
 ```javascript
@@ -131,17 +151,23 @@ dir.files(__dirname, function(err, files) {
 });
 ```
         
-#### files( dir, {sync:true} )
+#### files sync
 Synchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
-    
+
+In this example, a console log of items by relative path will be made
 ```javascript
-var files = dir.files(__dirname, {sync:true});
+var files = dir.files(__dirname, {sync:true, shortName:'relative'});
 console.log(files);
 ```
 
-#### promiseFiles( dir, callback )
+#### promiseFiles
 Asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
-    
+
+```
+promiseFiles(path, readType||options, options)
+```
+
+promiseFiles example
 ```javascript
 dir.promiseFiles(__dirname)
 .then((files)=>{
@@ -155,14 +181,18 @@ Note that for the files and subdirs the object returned is an array, and thus al
 ```javascript
 dir.files(__dirname, function(err, files) {
     if (err) throw err;
+    
     // sort ascending
     files.sort();
+    
     // sort descending
     files.reverse();
+    
     // include only certain filenames
     files = files.filter(function (file) {
        return ['allowed', 'file', 'names'].indexOf(file) > -1;
     });
+    
     // exclude some filenames
     files = files.filter(function (file) {
         return ['exclude', 'these', 'files'].indexOf(file) === -1;
@@ -172,9 +202,14 @@ dir.files(__dirname, function(err, files) {
 
 Also note that if you need to work with the contents of the files asynchronously, please use the readFiles method.  The files and subdirs methods are for getting a list of the files or subdirs in a directory as an array.
         
-#### subdirs( dir, callback )
+#### subdirs
 Asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of directory paths to a callback.
 
+```
+subdirs( dir, callback )
+```
+
+Example
 ```javascript
 dir.subdirs(__dirname, function(err, subdirs) {
     if (err) throw err;
@@ -182,12 +217,15 @@ dir.subdirs(__dirname, function(err, subdirs) {
 });
 ```
 
-#### paths(dir, [combine], callback )
+#### paths
 Asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of both file and directory paths to a callback.
 
-Separated into two distinct arrays (paths.files and paths.dirs)
+```
+paths(dir, [combine], callback )
+```
 
-```javascript
+Example: Separated into two distinct arrays (paths.files and paths.dirs)
+```
 dir.paths(__dirname, function(err, paths) {
     if (err) throw err;
     console.log('files:\n',paths.files);
@@ -207,7 +245,11 @@ dir.paths(__dirname, true, function(err, paths) {
 
 ## API Docs
 
-### files(dir, type, callback, options)
+### files API
+
+```
+files(dir, type, callback, options)
+```
 
 - **dir** - directory path to read
 - **type**='file'
@@ -218,7 +260,24 @@ dir.paths(__dirname, true, function(err, paths) {
 - **callback** - 
 - **options**
     - **sync**=false - results are returned inline and no callbacks are used
-    - **shortName**=false - instead of fullpath file names, just get the names
+    - **shortName**=false||'relative' - instead of fullpath file names, just get the names or relative item names
+    - **recursive**=true - traverse through all children of given path
+
+### promiseFiles API
+
+```
+promiseFiles(dir, type||options, options)
+```
+
+- **dir** - directory path to read
+- **type**='file'
+    - 'file' returns only file listings
+    - 'dir' returns only directory listings
+    - 'all' returns {dirs:[], files:[]}
+    - 'combine' returns []
+- **options**
+    - **sync**=false - DO NOT USE for promiseFiles, will cause unexpected behavior
+    - **shortName**=false||'relative' - instead of fullpath file names, just get the names or relative item names
     - **recursive**=true - traverse through all children of given path
 
 ## License
