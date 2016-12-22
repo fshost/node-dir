@@ -5,7 +5,8 @@
     tdir = path.join(fixturesDir, 'testdir'),
     tdir2 = path.join(fixturesDir, 'testdir2'),
     tdir3 = path.join(fixturesDir, 'testdir3'),
-    tdir4 = path.join(fixturesDir, 'testdir4');
+    tdir4 = path.join(fixturesDir, 'testdir4'),
+    tdir5 = path.join(fixturesDir, 'testdir5');
 
 describe('readfiles method', function() {
 
@@ -1201,6 +1202,11 @@ describe("files method", function() {
         });
     });
 
+    it("support non-UTF8 file names", function() {
+        var files = dir.files(tdir5,'file',()=>{},{sync:true});
+        var cmp = Buffer.from('testdir5/testuções.txt', 'latin1').toString();
+        path.relative(fixturesDir, files[0]).should.eql(cmp);
+   });
 });
 
 
