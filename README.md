@@ -36,14 +36,14 @@ var dir = require('node-dir');
 
 #### readFiles
 A variation on the method readFilesStream. See usage for [readFilesStream](#readFilesStream)
-```
+```javascript
 readFiles( dir, [options], fileCallback, [finishedCallback] )
 ```
 
 #### readFilesStream
 Sequentially read the content of each file in a directory, passing the contents to a callback, optionally calling a finished callback when complete.  The options and finishedCallback arguments are not required.
 
-```
+```javascript
 readFilesStream( dir, [options], streamCallback, [finishedCallback] )
 ```
 
@@ -64,7 +64,7 @@ A reverse sort can also be achieved by setting the sort option to 'reverse', 'de
 #### readFilesStream examples
 
 Display contents of files in this script's directory
-```
+```javascript
 dir.readFiles(__dirname,
     function(err, content, next) {
         if (err) throw err;
@@ -79,7 +79,7 @@ dir.readFiles(__dirname,
 ```
 
 Display contents of huge files in this script's directory
-```
+```javascript
 dir.readFilesStream(__dirname,
     function(err, stream, next) {
         if (err) throw err;
@@ -100,7 +100,7 @@ dir.readFilesStream(__dirname,
 ```
 
 Match only filenames with a .txt extension and that don't start with a `.´
-```
+```javascript
 dir.readFiles(__dirname, {
     match: /.txt$/,
     exclude: /^\./
@@ -117,9 +117,9 @@ dir.readFiles(__dirname, {
 ```
 
 Exclude an array of subdirectory names
-```
+```javascript
 dir.readFiles(__dirname, {
-    exclude: ['node_modules', 'test']
+    excludeDir: ['node_modules', 'test']
     }, function(err, content, next) {
         if (err) throw err;
         console.log('content:', content);
@@ -133,7 +133,7 @@ dir.readFiles(__dirname, {
 ```
 
 The callback for each file can optionally have a filename argument as its 3rd parameter and the finishedCallback argument is optional, e.g.
-```
+```javascript
 dir.readFiles(__dirname, function(err, content, filename, next) {
     console.log('processing content of file', filename);
     next();
@@ -163,7 +163,7 @@ console.log(files);
 #### promiseFiles
 Asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
 
-```
+```javascript
 promiseFiles(path, readType||options, options)
 ```
 
@@ -205,7 +205,7 @@ Also note that if you need to work with the contents of the files asynchronously
 #### subdirs
 Asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of directory paths to a callback.
 
-```
+```javascript
 subdirs( dir, callback )
 ```
 
@@ -220,12 +220,12 @@ dir.subdirs(__dirname, function(err, subdirs) {
 #### paths
 Asynchronously iterate the subdirectories of a directory and its subdirectories and pass an array of both file and directory paths to a callback.
 
-```
+```javascript
 paths(dir, [combine], callback )
 ```
 
 Example: Separated into two distinct arrays (paths.files and paths.dirs)
-```
+```javascript
 dir.paths(__dirname, function(err, paths) {
     if (err) throw err;
     console.log('files:\n',paths.files);
@@ -247,7 +247,7 @@ dir.paths(__dirname, true, function(err, paths) {
 
 ### files API
 
-```
+```javascript
 files(dir, type, callback, options)
 ```
 
@@ -265,7 +265,7 @@ files(dir, type, callback, options)
 
 ### promiseFiles API
 
-```
+```javascript
 promiseFiles(dir, type||options, options)
 ```
 
