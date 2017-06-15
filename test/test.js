@@ -9,7 +9,7 @@ var path = require('path'),
     tdir5 = path.join(fixturesDir, 'testdir5'),
     assert = require('assert'),
     isWin = require('os').type()=='Windows_NT',
-    winIt = isWin ? it.skip : it
+    winIt = isWin ? it.skip : it//skip all symlink based testing
 
 describe('readfiles method', function() {
 
@@ -441,9 +441,10 @@ describe('readfiles method', function() {
             });
     });
 
-    it('should done on error', function(done) {
+    winIt('should done on error', function(done) {
         dir.readFiles(
             tdir3, function(err, content, filename, next) {
+                if(filename.split(path.sep).pop()!='file1.txt')return next()
                 should.not.exist(err);
                 var shortName = path.basename(filename).replace(new RegExp(path.extname(filename) + '$'), '');
                 var expected = 'begin content of ' + shortName + '\ncontent body\nend content of ' + shortName;
@@ -1052,7 +1053,7 @@ describe('readfilesstream method', function() {
             });
     });
 
-    it('should done on error', function(done) {
+    winIt('should done on error', function(done) {
         dir.readFilesStream(
             tdir3, function(err, stream, filename, next) {
                 should.not.exist(err);
