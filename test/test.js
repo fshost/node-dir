@@ -1188,7 +1188,7 @@ describe("files method", function() {
 
     it("#files(path, {sync:true})", 
         function() {
-        var files = dir.files(tdir,'file',()=>{},{sync:true});
+        var files = dir.files(tdir,'file',function(){},{sync:true});
         var relFiles = files.map(function(curPath) {
             return path.relative(fixturesDir, curPath);
         });
