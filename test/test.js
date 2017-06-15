@@ -1249,7 +1249,7 @@ describe("files method", function() {
 
     //NOT supported everywhere
     it.skip("support non-UTF8 file names", function() {
-        var files = dir.files(tdir5,'file',()=>{},{sync:true, excludeHidden:true});
+        var files = dir.files(tdir5,'file', function(){}, {sync:true, excludeHidden:true});
         var cmp = Buffer.from('testdir5/testuções.txt', 'latin1').toString();
         
         var relFile = path.relative(fixturesDir, files[0])
