@@ -1,5 +1,6 @@
 var dirpaths = require('./lib/paths');
 
-Object.assign(exports, dirpaths)
+for(var x in dirpaths)exports[x] = dirpaths[x]
+
 exports.readFiles = require('./lib/readfiles');
 exports.readFilesStream = require('./lib/readfilesstream');
