@@ -1,6 +1,7 @@
 language: node_js
 
-# test on node.js version 0.10.x
 node_js:
+  - 4
+  - 5
+  - 0.12
   - 0.10
-

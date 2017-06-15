@@ -156,7 +156,7 @@ Synchronously iterate the files of a directory and its subdirectories and pass a
 
 In this example, a console log of items by relative path will be made
 ```javascript
-var files = dir.files(__dirname, {sync:true, shortName:'relative'});
+var files = dir.files(__dirname, {sync:true, shortName:'relative', excludeHidden:true});
 console.log(files);
 ```
 
@@ -262,6 +262,7 @@ files(dir, type, callback, options)
     - **sync**=false - results are returned inline and no callbacks are used
     - **shortName**=false||'relative' - instead of fullpath file names, just get the names or relative item names
     - **recursive**=true - traverse through all children of given path
+    - **excludeHidden** - hidden files will be ignored (files starting with a dot are ignored)
 
 ### promiseFiles API
 
