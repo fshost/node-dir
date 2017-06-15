@@ -38,10 +38,10 @@ describe('readfiles method', function() {
                 files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 }).sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -67,10 +67,10 @@ describe('readfiles method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -96,10 +96,10 @@ describe('readfiles method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -125,10 +125,10 @@ describe('readfiles method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/subdir/file4.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/file2.text',
-                    'testdir/file1.txt'
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'file1.txt'
                 ]);
                 filenames.should.eql(['file4', 'file3', 'file2', 'file1']);
                 done();
@@ -156,8 +156,8 @@ describe('readfiles method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text'
                 ]);
                 filenames.should.eql(['file1', 'file2']);
                 done();
@@ -242,8 +242,8 @@ describe('readfiles method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2']);
                 done();
@@ -309,10 +309,10 @@ describe('readfiles method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -528,10 +528,10 @@ describe('readfilesstream method', function() {
                 files.map(function(curPath) {
                     return path.relative(fixturesDir, curPath);
                 }).sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -565,10 +565,10 @@ describe('readfilesstream method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -601,10 +601,10 @@ describe('readfilesstream method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -637,10 +637,10 @@ describe('readfilesstream method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/subdir/file4.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/file2.text',
-                    'testdir/file1.txt'
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'file1.txt'
                 ]);
                 filenames.should.eql(['file4', 'file3', 'file2', 'file1']);
                 done();
@@ -675,8 +675,8 @@ describe('readfilesstream method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text'
                 ]);
                 filenames.should.eql(['file1', 'file2']);
                 done();
@@ -789,8 +789,8 @@ describe('readfilesstream method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2']);
                 done();
@@ -877,10 +877,10 @@ describe('readfilesstream method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relFiles.sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
                 filenames.sort().should.eql(['file1', 'file2', 'file3', 'file4']);
                 done();
@@ -1132,10 +1132,10 @@ describe('#promiseFiles',function(){
                 return path.relative(fixturesDir, curPath);
             });
             relFiles.sort().should.eql([
-                'testdir/file1.txt',
-                'testdir/file2.text',
-                'testdir/subdir/file3.txt',
-                'testdir/subdir/file4.text'
+                'testdir'+path.sep+'file1.txt',
+                'testdir'+path.sep+'file2.text',
+                'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                'testdir'+path.sep+'subdir'+path.sep+'file4.text'
             ]);
         })
         .then(done).catch(done)
@@ -1175,8 +1175,8 @@ describe('#promiseFiles',function(){
                 'file1.txt',
                 'file2.text',
                 'subdir',
-                'subdir/file3.txt',
-                'subdir/file4.text'
+                'subdir'+path.sep+'file3.txt',
+                'subdir'+path.sep+'file4.text'
             ])
         })
         .then(done).catch(done)
@@ -1194,10 +1194,10 @@ describe("files method", function() {
         });
 
         relFiles.sort().should.eql([
-            'testdir/file1.txt',
-            'testdir/file2.text',
-            'testdir/subdir/file3.txt',
-            'testdir/subdir/file4.text'
+            'testdir'+path.sep+'file1.txt',
+            'testdir'+path.sep+'file2.text',
+            'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+            'testdir'+path.sep+'subdir'+path.sep+'file4.text'
         ]);
     });
 
@@ -1208,10 +1208,10 @@ describe("files method", function() {
                 return path.relative(fixturesDir, curPath);
             });
             relFiles.sort().should.eql([
-                'testdir/file1.txt',
-                'testdir/file2.text',
-                'testdir/subdir/file3.txt',
-                'testdir/subdir/file4.text'
+                'testdir'+path.sep+'file1.txt',
+                'testdir'+path.sep+'file2.text',
+                'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                'testdir'+path.sep+'subdir'+path.sep+'file4.text'
             ]);
             done();
         });
@@ -1224,8 +1224,8 @@ describe("files method", function() {
                 return path.relative(fixturesDir, curPath);
             });
             relFiles.sort().should.eql([
-                'testdir3/broken_link.txt',
-                'testdir3/file1.txt'
+                'testdir3'+path.sep+'broken_link.txt',
+                'testdir3'+path.sep+'file1.txt'
             ]);
             done();
         });
@@ -1238,10 +1238,10 @@ describe("files method", function() {
                 return path.relative(fixturesDir, curPath);
             });
             relFiles.sort().should.eql([
-                'testdir4/testdir/file1.txt',
-                'testdir4/testdir/file2.text',
-                'testdir4/testdir/subdir/file3.txt',
-                'testdir4/testdir/subdir/file4.text'
+                'testdir4'+path.sep+'testdir'+path.sep+'file1.txt',
+                'testdir4'+path.sep+'testdir'+path.sep+'file2.text',
+                'testdir4'+path.sep+'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                'testdir4'+path.sep+'testdir'+path.sep+'subdir'+path.sep+'file4.text'
             ]);
             done();
         });
@@ -1250,7 +1250,7 @@ describe("files method", function() {
     //NOT supported everywhere
     it.skip("support non-UTF8 file names", function() {
         var files = dir.files(tdir5,'file', function(){}, {sync:true, excludeHidden:true});
-        var cmp = Buffer.from('testdir5/testuções.txt', 'latin1').toString();
+        var cmp = Buffer.from('testdir5'+path.sep+'testuções.txt', 'latin1').toString();
         
         var relFile = path.relative(fixturesDir, files[0])
         relFile.should.eql(cmp)//This test does not pass on all Systems
@@ -1267,7 +1267,7 @@ describe('subdirs method', function() {
                 return path.relative(fixturesDir, curPath);
             });
             relPaths.length.should.equal(1);
-            relPaths[0].should.equal('testdir/subdir');
+            relPaths[0].should.equal('testdir'+path.sep+'subdir');
             done();
         });
 
@@ -1289,13 +1289,13 @@ describe('paths method', function() {
                 return path.relative(fixturesDir, curPath);
             });
             relFiles.sort().should.eql([
-                'testdir/file1.txt',
-                'testdir/file2.text',
-                'testdir/subdir/file3.txt',
-                'testdir/subdir/file4.text'
+                'testdir'+path.sep+'file1.txt',
+                'testdir'+path.sep+'file2.text',
+                'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                'testdir'+path.sep+'subdir'+path.sep+'file4.text'
             ]);
             relPaths.length.should.equal(1);
-            relPaths[0].should.equal('testdir/subdir');
+            relPaths[0].should.equal('testdir'+path.sep+'subdir');
             done();
         });
     });
@@ -1311,11 +1311,11 @@ describe('paths method', function() {
                     return path.relative(fixturesDir, curPath);
                 });
                 relPaths.sort().should.eql([
-                    'testdir/file1.txt',
-                    'testdir/file2.text',
-                    'testdir/subdir',
-                    'testdir/subdir/file3.txt',
-                    'testdir/subdir/file4.text'
+                    'testdir'+path.sep+'file1.txt',
+                    'testdir'+path.sep+'file2.text',
+                    'testdir'+path.sep+'subdir',
+                    'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
+                    'testdir'+path.sep+'subdir'+path.sep+'file4.text'
                 ]);
             });
             done();
