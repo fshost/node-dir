@@ -1,4 +1,6 @@
 [![Build Status](https://secure.travis-ci.org/AckerApple/node-dir.svg)](http://travis-ci.org/AckerApple/node-dir)
+[![Build status](https://ci.appveyor.com/api/projects/status/aad8t55ury0ijhe1?svg=true)](https://ci.appveyor.com/project/AckerApple/node-dir)
+[![NPM version](https://img.shields.io/npm/v/path-reader.svg?style=flat-square)](https://www.npmjs.com/package/path-reader)
 
 # path-reader
 A lightweight Node.js module with methods for some common directory and file operations, including asynchronous, non-blocking methods for recursively getting an array of files, subdirectories, or both, and methods for recursively, sequentially reading and processing the contents of files in a directory and its subdirectories, with several options available for added flexibility if needed.
