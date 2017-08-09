@@ -1,6 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/fshost/node-dir.svg)](http://travis-ci.org/fshost/node-dir)
+[![Build Status](https://secure.travis-ci.org/ackerapple/path-reader.svg)](http://travis-ci.org/ackerapple/path-reader)
 
-# node-dir
+# path-reader
 A lightweight Node.js module with methods for some common directory and file operations, including asynchronous, non-blocking methods for recursively getting an array of files, subdirectories, or both, and methods for recursively, sequentially reading and processing the contents of files in a directory and its subdirectories, with several options available for added flexibility if needed.
 
 ### Table of Contents
@@ -23,7 +23,7 @@ A lightweight Node.js module with methods for some common directory and file ope
 
 #### installation
 
-    npm install node-dir
+    npm install path-reader
 
 ### usage
 
@@ -31,7 +31,7 @@ A lightweight Node.js module with methods for some common directory and file ope
 For the sake of brevity, assume that the following line of code precedes all of the examples.
 
 ```javascript
-var dir = require('node-dir');
+var dir = require('path-reader');
 ```
 
 #### readFiles
