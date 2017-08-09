@@ -1,15 +1,10 @@
 {
-  "name": "node-dir",
+  "name": "path-reader",
   "version": "0.1.19",
   "description": "asynchronous file and directory operations for Node.js",
   "main": "index",
-  "homepage": "https://github.com/fshost",
-  "repository": "https://github.com/fshost/node-dir",
-  "author": {
-    "name": "Nathan Cartwright",
-    "email": "fshost@yahoo.com",
-    "url": "https://github.com/fshost"
-  },
+  "homepage": "https://github.com/ackerapple",
+  "repository": "https://github.com/ackerapple/path-reader",
   "directories": {
     "lib": "lib"
   },
@@ -21,7 +16,7 @@
   },
   "license": "MIT",
   "keywords": [
-    "node-dir",
+    "path-reader",
     "directory",
     "dir",
     "subdir",
@@ -31,10 +26,10 @@
     "fs"
   ],
   "dependencies": {
-    "minimatch": "^3.0.2"
+    "minimatch": "^3.0.4"
   },
   "devDependencies": {
-    "mocha": "~1.13.0",
-    "should": "~2.0.2"
+    "mocha": "3.5.0",
+    "should": "11.2.1"
   }
 }
