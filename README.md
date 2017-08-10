@@ -1,5 +1,5 @@
-[![Build Status](https://secure.travis-ci.org/AckerApple/node-dir.svg)](http://travis-ci.org/AckerApple/node-dir)
-[![Build status](https://ci.appveyor.com/api/projects/status/aad8t55ury0ijhe1?svg=true)](https://ci.appveyor.com/project/AckerApple/node-dir)
+[![Build Status](https://secure.travis-ci.org/AckerApple/path-reader.svg)](http://travis-ci.org/AckerApple/path-reader)
+[![Build status](https://ci.appveyor.com/api/projects/status/6sa5pfcsrix5s8va?svg=true)](https://ci.appveyor.com/project/AckerApple/path-reader)
 [![NPM version](https://img.shields.io/npm/v/path-reader.svg?style=flat-square)](https://www.npmjs.com/package/path-reader)
 
 # path-reader
@@ -21,6 +21,7 @@ A lightweight Node.js module with methods for some common directory and file ope
 - [API Docs](#api-docs)
     - [files](#files-api)
     - [promiseFiles](#promisefiles-api)
+- [History](#history)
 - [License](#license)
 
 #### installation
@@ -282,6 +283,9 @@ promiseFiles(dir, type||options, options)
     - **sync**=false - DO NOT USE for promiseFiles, will cause unexpected behavior
     - **shortName**=false||'relative' - instead of fullpath file names, just get the names or relative item names
     - **recursive**=true - traverse through all children of given path
+
+## History
+path-reader is a fork of node-dir. The original maintainer of node-dir, @fshost, has not updated nor been heard from in some time. Use path-reader, it is far superior to node-dir.
 
 ## License
 MIT licensed (See LICENSE.txt)
