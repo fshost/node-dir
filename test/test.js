@@ -12,6 +12,9 @@ var path = require('path'),
   isWin = require('os').type()=='Windows_NT',
   winIt = isWin ? it.skip : it//skip all symlink based testing
 
+//create empty folder
+require('fs').mkdirSync( tdir6 )
+
 describe('readfiles method', function() {
 
   it('should pass the contents of every file to a callback', function(done) {
