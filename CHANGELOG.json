@@ -1,0 +1,7 @@
+# path-reader - Change Log
+All notable changes to this project will be documented here.
+
+## [1.0.5] - 2017-10-13
+### Fixed
+- empty folder reads are now empty array instead of undefined
+
