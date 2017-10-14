@@ -1273,7 +1273,7 @@ describe("files method", function() {
 
   it("empty-folder-promise", function(done) {
     dir.promiseFiles(tdir6,'file', {excludeHidden:true})
-    .then(files=>{
+    .then(function(files){
         assert.equal(files.length, 0)
     })
     .then(done).catch(done)
