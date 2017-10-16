@@ -1,6 +1,6 @@
 {
   "name": "path-reader",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "asynchronous file and directory operations for Node.js",
   "main": "index",
   "homepage": "https://github.com/ackerapple",

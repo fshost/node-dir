@@ -1,19 +1,37 @@
-var path = require('path'),
-  should = require('should'),
-  dir = require('..'),
-  fixturesDir = path.join(__dirname, 'fixtures'),
-  tdir = path.join(fixturesDir, 'testdir'),
-  tdir2 = path.join(fixturesDir, 'testdir2'),
-  tdir3 = path.join(fixturesDir, 'testdir3'),
-  tdir4 = path.join(fixturesDir, 'testdir4'),
-  tdir5 = path.join(fixturesDir, 'testdir5'),
-  tdir6 = path.join(fixturesDir, 'testdir6'),
-  assert = require('assert'),
-  isWin = require('os').type()=='Windows_NT',
-  winIt = isWin ? it.skip : it//skip all symlink based testing
+var fs = require('fs')
+var path = require('path')
+var should = require('should')
+var dir = require('..')
+var fixturesDir = path.join(__dirname, 'fixtures')
+  
+var tdir = path.join(fixturesDir, 'testdir')
+var tdir2 = path.join(fixturesDir, 'testdir2')
+var tdir3 = path.join(fixturesDir, 'testdir3')
+var tdir4 = path.join(fixturesDir, 'testdir4')
+var tdir5 = path.join(fixturesDir, 'testdir5')
+//empty dirs that may not exist
+var tdir6 = path.join(fixturesDir, 'testdir6')
+var tdir7 = path.join(fixturesDir, 'testdir7')
+var tdir8 = path.join(fixturesDir, 'testdir7', 'testdir8')
 
-//create empty folder
-require('fs').mkdirSync( tdir6 )
+var assert = require('assert')
+var isWin = require('os').type()=='Windows_NT'
+var winIt = isWin ? it.skip : it//skip all symlink based testing
+
+//param empty folder
+function paramDir(pathTo){
+  try{
+    fs.mkdirSync( pathTo )
+  }catch(e){
+    if( !e.code || e.code!='EEXIST' ){
+      throw e
+    }
+  }  
+}
+
+paramDir( tdir6 )
+paramDir( tdir7 )
+paramDir( tdir8 )
 
 describe('readfiles method', function() {
 
@@ -1266,28 +1284,42 @@ describe("files method", function() {
     relFile.should.eql(cmp)//This test does not pass on all Systems
   });
 
-  it("empty-folder", function() {
-    var files = dir.files(tdir6,'file', function(){}, {sync:true, excludeHidden:true});
-    assert.equal(files.length, 0)
-  });
-
-  it("empty-folder-promise", function(done) {
-    dir.promiseFiles(tdir6,'file', {excludeHidden:true})
-    .then(function(files){
-        assert.equal(files.length, 0)
-    })
-    .then(done).catch(done)
-  });
-
-  it("empty-folder-callback", function(done) {
-    dir.files(tdir6,'file', function(err,files){
-      if(err)return done(err)
+  describe('empty-folders',function(){
+    it("empty-folder", function() {
+      var files = dir.files(tdir6,'file', function(){}, {sync:true, excludeHidden:true});
       assert.equal(files.length, 0)
-      done()
-    }, {excludeHidden:true})
-  });
-});
+    })
 
+    it("folder-with-folder-only", function() {
+      var files = dir.files(tdir7,'file', function(){}, {sync:true, excludeHidden:true});
+      assert.equal(files.length, 0)
+    })
+
+    it("folder-with-folder-only-promise", function(done) {
+      dir.promiseFiles(tdir7,'file', {excludeHidden:true})
+      .then(function(files){
+          assert.equal(files.length, 0)
+      })
+      .then(done).catch(done)
+    })
+
+    it("empty-folder-promise", function(done) {
+      dir.promiseFiles(tdir6,'file', {excludeHidden:true})
+      .then(function(files){
+          assert.equal(files.length, 0)
+      })
+      .then(done).catch(done)
+    })
+
+    it("empty-folder-callback", function(done) {
+      dir.files(tdir6,'file', function(err,files){
+        if(err)return done(err)
+        assert.equal(files.length, 0)
+        done()
+      }, {excludeHidden:true})
+    })
+  })    
+})
 
 describe('subdirs method', function() {
   it('should pass an array of the subdir paths of every subdir in a directory (recursive) to a callback', function(done) {
