@@ -1362,27 +1362,42 @@ describe('paths method', function() {
     });
   });
 
-  describe('when called with combine argument set to true', function() {
-
+  describe('when called with combine argument set to true', function(){
     it('should pass an array of filepaths of all subdirs and files in a directory and its subdirs to a callback', function(done) {
       dir.paths(tdir, true, function(err, paths) {
-        should.not.exist(err);
+        should.not.exist(err)
 
         paths.should.be.a.array;
         var relPaths = paths.map(function(curPath) {
           return path.relative(fixturesDir, curPath);
-        });
+        })
+
         relPaths.sort().should.eql([
           'testdir'+path.sep+'file1.txt',
           'testdir'+path.sep+'file2.text',
           'testdir'+path.sep+'subdir',
           'testdir'+path.sep+'subdir'+path.sep+'file3.txt',
           'testdir'+path.sep+'subdir'+path.sep+'file4.text'
-        ]);
-      });
-      done();
-    });
+        ])
+      })
+      done()
+    })
+  })
 
-  });
+  describe('valuetizer',function(){
+    it('files by mtime', function(done) {
+      var foundMtime = false
+      var options = {
+        valuetizer:function(stat, shortName, longPath){
+          return stat.mtime && !foundMtime ? foundMtime=true && stat : null
+        }
+      }
 
+      dir.promiseFiles(tdir, 'file', options)
+      .then(function(results){
+        assert.equal(results.length, 1)
+      })
+      .then(done).catch(done)
+    })
+  })
 });
