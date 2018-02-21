@@ -13,7 +13,7 @@ A lightweight Node.js module with methods for some common directory and file ope
                 - [readFilesStream examples](#readfilesstream-examples)
         - [files( dir, callback )](#files-dir-callback)
         - [files( dir, {sync:true} )](#files-dir-synctrue)
-        - [promiseFiles( dir, callback )](#promisefiles-dir-callback)
+        - [promiseFiles( dir, type, options )](#promisefiles-dir-callback)
         - [subdirs( dir, callback )](#subdirs-dir-callback)
         - [paths(dir, [combine], callback )](#pathsdir-combine-callback)
 - [API Docs](#api-docs)
@@ -139,7 +139,7 @@ var files = dir.files(__dirname, {sync:true});
 console.log(files);
 ```
 
-#### promiseFiles( dir, callback )
+#### promiseFiles( dir, type, options )
 Asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
     
 ```javascript
