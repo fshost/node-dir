@@ -86,7 +86,7 @@ dir.readFilesStream(__dirname,
 
 // match only filenames with a .txt extension and that don't start with a `.´
 dir.readFiles(__dirname, {
-    match: /.txt$/,
+    match: /\.txt$/,
     exclude: /^\./
     }, function(err, content, next) {
         if (err) throw err;
