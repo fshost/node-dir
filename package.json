@@ -1,6 +1,6 @@
 {
   "name": "path-reader",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "asynchronous file and directory operations for Node.js",
   "main": "lib/index",
   "typings": "lib/index.d.ts",
@@ -30,11 +30,13 @@
     "Node.js",
     "fs"
   ],
-  "dependencies": {
-    "minimatch": "^3.0.4"
+  "peerDependencies": {
+    "minimatch": ">=3.0.4"
+  },
+  "optionalDependencies": {
+    "@types/node": "^18.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
     "mocha": "3.5.0",
     "should": "11.2.1",
     "typescript": "^4.7.3"
