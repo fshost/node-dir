@@ -193,8 +193,10 @@ console.log(files);
 Asynchronously iterate the files of a directory and its subdirectories and pass an array of file paths to a callback.
 
 ```javascript
-promiseFiles(path, readType||options, options)
+require('path-reader').promiseFiles(path, readType||options, options, fsStatOptions)
 ```
+
+> [read more about fsStatOptions here](https://nodejs.org/api/fs.html#fsstatsyncpath-options)
 
 promiseFiles example
 ```javascript

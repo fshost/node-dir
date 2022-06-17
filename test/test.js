@@ -1275,7 +1275,7 @@ describe("files method", function() {
     });
   });
 
-  //NOT supported everywhere. Real hard to get working
+  // NOT supported everywhere. Real hard to get working
   it.skip("support non-UTF8 file names", function() {
     var files = dir.files(tdir5,'file', function(){}, {sync:true, excludeHidden:true});
     var cmp = Buffer.from('testdir5'+path.sep+'testuções.txt', 'latin1').toString();

@@ -1,15 +1,20 @@
 {
   "name": "path-reader",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "asynchronous file and directory operations for Node.js",
-  "main": "index",
+  "main": "lib/index",
+  "typings": "lib/index.d.ts",
   "homepage": "https://github.com/ackerapple",
   "repository": "https://github.com/ackerapple/path-reader",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "build": "rm -rf lib && tsc --project ./ts/tsconfig.json",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "version:patch": "npm --no-git-tag-version version patch",
+    "save": "npm run build && npm run test && npm run version:patch && git add . && git commit -m \"update\" && git push",
+    "deploy": "npm run save && npm publish"
   },
   "engines": {
     "node": ">= 0.10.5"
@@ -29,7 +34,9 @@
     "minimatch": "^3.0.4"
   },
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "mocha": "3.5.0",
-    "should": "11.2.1"
+    "should": "11.2.1",
+    "typescript": "^4.7.3"
   }
 }
