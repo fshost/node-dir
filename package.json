@@ -1,27 +1,27 @@
 {
-  "name": "node-dir",
-  "version": "0.1.17",
+  "name": "path-reader",
+  "version": "2.0.2",
   "description": "asynchronous file and directory operations for Node.js",
-  "main": "index",
-  "homepage": "https://github.com/fshost",
-  "repository": "https://github.com/fshost/node-dir",
-  "author": {
-    "name": "Nathan Cartwright",
-    "email": "fshost@yahoo.com",
-    "url": "https://github.com/fshost"
-  },
+  "main": "lib/index",
+  "typings": "lib/index.d.ts",
+  "homepage": "https://github.com/ackerapple",
+  "repository": "https://github.com/ackerapple/path-reader",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "build": "rm -rf lib && tsc --project ./ts/tsconfig.json",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "version:patch": "npm --no-git-tag-version version patch",
+    "save": "npm run build && npm run test && npm run version:patch && git add . && git commit -m \"update\" && git push",
+    "deploy": "npm run save && npm publish"
   },
   "engines": {
     "node": ">= 0.10.5"
   },
   "license": "MIT",
   "keywords": [
-    "node-dir",
+    "path-reader",
     "directory",
     "dir",
     "subdir",
@@ -31,10 +31,14 @@
     "fs"
   ],
   "dependencies": {
-    "minimatch": "^3.0.2"
+    "minimatch": "^3.0.4"
+  },
+  "optionalDependencies": {
+    "@types/node": "^18.0.0"
   },
   "devDependencies": {
-    "mocha": "~1.13.0",
-    "should": "~2.0.2"
+    "mocha": "3.5.0",
+    "should": "11.2.1",
+    "typescript": "^4.7.3"
   }
 }
